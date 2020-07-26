@@ -20,7 +20,7 @@ myApp.controller('HomeController', function($scope, $location, $http, $filter){
 	$scope.action='add';
 	
 	$scope.loadBooks = function(){
-		$http.get("http://fakerestapi.azurewebsites.net/api/Books?api_key=/api/Books")
+		$http.get("https://fakerestapi.azurewebsites.net/api/Books?api_key=/api/Books")
 			.then(function(response) {
 				$scope.books = response.data;
 				console.log("books", $scope.books);
@@ -113,7 +113,7 @@ myApp.controller('HomeController', function($scope, $location, $http, $filter){
 	$scope.delete=function (index) {
 		
 			if (confirm("Are you sure?")) {
-				$http.delete("http://fakerestapi.azurewebsites.net/api/Books/"+$scope.items[index].ID+"?api_key=/api/Books")
+				$http.delete("https://fakerestapi.azurewebsites.net/api/Books/"+$scope.items[index].ID+"?api_key=/api/Books")
 				.then(function(response) {
 					if(response.status===200){
 					//removing element from array
@@ -137,7 +137,7 @@ myApp.controller('HomeController', function($scope, $location, $http, $filter){
 		if(action==='Edit' || action==='add' ){
 			$http({
 				method: 'POST',
-				url: "http://fakerestapi.azurewebsites.net/api/Books?api_key=%2Fapi%2FBooks",
+				url: "https://fakerestapi.azurewebsites.net/api/Books?api_key=%2Fapi%2FBooks",
 				data: item,
 				headers: {'Content-Type': 'application/json'}
 			}).then(function(response) {
