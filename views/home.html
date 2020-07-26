@@ -1,0 +1,117 @@
+
+
+<div class="row">
+	<div class="col-12 col-md-10">
+	    <h3>Books List</h3>
+	</div>
+	<div class="col-12 col-md-2" style="padding-top:20px">
+		<button class="btn btn-success" data-toggle="modal" data-target="#myModal">Add Book</button>
+		<button class="btn btn-danger pull-right" ng-click="logout();">Logout</button>
+	</div>
+</div>
+<div class="row" ng-if="isLoad==false">
+	<div class="col-12 col-md-10 loader">
+		<img src="images/loading.gif" width="200"> 
+	</div>
+</div>
+<div class="row" ng-if="isLoad==true">
+	<div class="col-md-12">
+		<table class="table table-striped table-condensed table-hover">
+                <thead>
+                    <tr>
+                        <th class="id" custom-sort order="'ID'" sort="sort">Id&nbsp;</th>
+                        <th class="name" custom-sort order="'Title'" sort="sort">Title&nbsp;</th>
+                        <th class="description" custom-sort order="'PublishDate'" sort="sort">Publish Date&nbsp;</th>
+                        <th class="field3">Action &nbsp;</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <td colspan="6">
+                        <div class="pagination pull-right">
+                            <ul>
+                                <li ng-class="{disabled: currentPage == 0}">
+                                    <a href ng-click="prevPage()">« Prev</a>
+                                </li>
+                            
+                                <li ng-repeat="n in range(pagedItems.length, currentPage, currentPage + gap) "
+                                    ng-class="{active: n == currentPage}"
+                                ng-click="setPage()">
+                                    <a href ng-bind="n + 1">1</a>
+                                </li>
+                             
+                                <li ng-class="{disabled: (currentPage) == pagedItems.length - 1}">
+                                    <a href ng-click="nextPage()">Next »</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tfoot>
+                <tbody>
+                    <tr ng-repeat="item in pagedItems[currentPage] | orderBy:sort.sortingOrder:sort.reverse">
+                        <td>{{item.ID}}</td>
+                        <td>{{item.Title}}</td>
+                        <td>{{item.PublishDate | myDate}}</td>
+                        <td><button class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-pencil" ng-click="edit(item,action);" data-toggle="modal" data-target="#myModal"></i></button> 
+						<button class="btn btn-danger btn-sm"><i class="glyphicon glyphicon-trash" ng-click="delete($index); " ></i></button></td>
+                    </tr>
+                </tbody>
+            </table>
+	</div>
+</div>
+
+<!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    <form name="bookForm">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body table-responsive">
+		
+			<table class="table no-border text-right">
+				<tr>
+					<td><label for="title">Title:</label></td>
+					<td><input type="text" class="form-control" ng-pattern="/^[a-z0-9]+$/i" ng-model="item.Title" name="Title" id="title" required>
+					<span style="color:red;" ng-show="bookForm.Title.$dirty && bookForm.Title.$invalid" class="ng-hide pull-left">   
+                  Please Enter Valid  Title.!  
+                 </span>  
+					</td>
+				</tr>
+				<tr>
+					<td><label for="description">Description:</label></td>
+					<td><input type="text" class="form-control" ng-model="item.Description" id="description" required></td>
+				</tr>
+				<tr>
+					<td><label for="publishDate">Publish Date:</label></td>
+					<td><input type="date" class="form-control" ng-model="item.PublishDate" id="publishDate" required></td>
+				</tr>
+				<tr>
+					<td><label for="excerpt">Excerpt:</label></td>
+					<td><input type="text" class="form-control" ng-model="item.Excerpt" id="excerpt"></td>
+				</tr>
+				<tr>
+					<td><label for="pageCount">Page Count:</label></td>
+					<td><input type="text" class="form-control" ng-pattern="/^[1-9][0-9]*$/" ng-model="item.PageCount" name="PageCount" id="pageCount" required>
+					<span style="color:red;" ng-show="bookForm.PageCount.$dirty && bookForm.PageCount.$invalid" class="ng-hide pull-left">   
+                  Please Enter positive numbers.!  
+                 </span>  </td>
+				</tr>
+			</table>
+        </div>
+        <div class="modal-footer">
+			<button type="submit" class="btn btn-primary" data-dismiss="modal" ng-disabled="bookForm.$invalid" ng-click="add(item,action);">Submit</button>
+          <button type="button" class="btn btn-danger" ng-click="cancelEvent();" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+      </form>
+    </div>
+  </div>
+  
+<style>
+	.table.no-border tr td, .table.no-border tr th {
+  border-width: 0;
+}
+</style>
